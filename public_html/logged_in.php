@@ -1,0 +1,23 @@
+<?php 
+//session_start();
+require_once 'secure_conn.php';
+require 'includes/header.php';
+?>
+	<main>
+	<?php if (isset($_SESSION['firstName'])){ //check for session variable
+			$firstname = $_SESSION['firstName'];
+			$message = "Welcome back, $firstname";
+			$message2 = "You are now logged in";
+		} else { 
+			$message = 'You have reached this page in error';
+			$message2 = 'Please use the menu at the right';	
+		}
+		// Print the message:
+		echo '<h2>'.$message.'</h2>';
+		echo '<h3>'.$message2.'</h3>';
+		?>
+	</main>
+	<?php // Include the footer and quit the script:
+	include ('./includes/footer.php'); 
+	?>
+	

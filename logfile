@@ -1,0 +1,32 @@
+mysql> create temporary table temp (cno int, count int);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into temp select cno, count(*) from orders where year(received) > year(curdate())-2 group by cno;
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> delete from odetails where ono not in (select ono from orders where cno not in (select cno from temp));
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from odetails where ono in (select ono from orders where cno not in (select cno from temp where count < 2));
+Query OK, 9 rows affected (0.00 sec)
+
+mysql> delete from orders where cno not in (select cno from temp);
+Query OK, 6 rows affected (0.01 sec)
+
+mysql> delete from orders where cno  in (select cno from temp where count < 2);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delete from customers where cno not in (select cno from temp);
+Query OK, 5 rows affected (0.01 sec)
+
+mysql> delete from customers where cno in (select cno from temp where count < 2);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from customers;
+Empty set (0.00 sec)
+
+mysql> drop table temp;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> notee
